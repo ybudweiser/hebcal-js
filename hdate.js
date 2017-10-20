@@ -27,14 +27,9 @@
  */
 var c = require('./common'),
 	greg = require('./greg'),
-	suncalc = require('suncalc'),
+	SolarCalc = require('solar-calc'),
 	cities = require('./cities'),
 	gematriya = require('gematriya');
-
-suncalc.addTime(-16.1, 'alot_hashachar', 0);
-suncalc.addTime(-11.5, 'misheyakir', 0);
-suncalc.addTime(-10.2, 'misheyakir_machmir', 0);
-suncalc.addTime(-8.5, 0, 'tzeit');
 
 // for minifying optimizations
 var getFullYear = 'getFullYear',
@@ -331,10 +326,14 @@ prototype.setLocation = function(lat, lon) {
 };
 
 function suntime(hdate) {
-	// reset the date to midday before calling suncalc api
-	// https://github.com/mourner/suncalc/issues/11
 	var date = hdate.greg();
-	return suncalc.getTimes(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0, 0, 0), hdate.lat, hdate.long);
+	 var customZones={"tzeit": {angle:8.5,rising:false},
+      "alot_hashachar": {angle:16.1,rising:true},
+      "misheyakir_machmir":{angle:10.2,rising:true},
+  	   "misheyakir":{angle:11.5,rising:true}};
+
+	var solarcalc= new SolarCalc(date, hdate.lat, hdate.long,customZones);
+	return solarcalc;
 }
 
 prototype.sunrise = function() {

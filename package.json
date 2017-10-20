@@ -31,7 +31,7 @@
 		"build": "node compile.js"
 	},
 	"dependencies": {
-		"suncalc": "^1.8.0",
+		"solar-calc":"file:../solar-calc",
 		"gematriya": "^1.0.1"
 	},
 	"devDependencies": {
